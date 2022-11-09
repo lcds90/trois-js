@@ -1,7 +1,17 @@
 <template>
+<!-- SECTION Renderer
+  // LINK https://troisjs.github.io/guide/core/renderer.html
+  // LINK https://threejs.org/docs/#api/en/renderers/WebGLRenderer
+  /* NOTE É o espaço aonde Three JS será renderizado para animações, no TroisJS isso é inicializado através de um componente  */
+  // !SECTION -->
   <Renderer resize="window">
-    <Camera :position="{ z: 100 }" />
-    <Scene>     
+    <Camera :position="{ z: 100 }" :fov="75" :near="0.1" :far="1000" :aspect="aspect"/>
+    <!-- SECTION Scene
+    // LINK https://troisjs.github.io/guide/core/scene.html
+    // LINK https://threejs.org/docs/#api/en/scenes/Scene
+    // NOTE Uma cena é aonde acontece a ação do ThreeJS 
+    // !SECTION -->
+    <Scene ref="sceneC">     
       <Box :size="10">
         <BasicMaterial />
       </Box>
@@ -10,18 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { Box, Camera, MeshPublicInterface, Renderer, RendererPublicInterface, Scene } from 'troisjs'
+import { ref, onMounted, computed } from 'vue'
+import { Box, Camera, MeshPublicInterface, Renderer, RendererPublicInterface, Scene, SceneInjectionKey } from 'troisjs'
+import { AxesHelper, Scene as TScene } from 'three';
 
-const rendererC = ref()
-const meshC = ref()
-
+const sceneC = ref()
+const aspect = computed(() => window.innerWidth / window.innerHeight);
 onMounted(() => {
-  const renderer = rendererC.value as RendererPublicInterface
-  const mesh = (meshC.value as MeshPublicInterface).mesh
-  renderer.onBeforeRender(() => {
-    mesh!.rotation.x += 0.01
-  })
+  const scene = sceneC.value as TScene
+  console.dir(scene.add())
 })
 </script>
 
